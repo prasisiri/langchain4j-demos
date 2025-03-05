@@ -1,0 +1,10 @@
+dependencies {
+    implementation 'dev.langchain4j:langchain4j:0.24.0'
+    implementation 'dev.langchain4j:langchain4j-open-ai:0.24.0'
+    
+    // Add SLF4J implementation
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
+    
+    // Add dotenv for reading .env files
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+} 

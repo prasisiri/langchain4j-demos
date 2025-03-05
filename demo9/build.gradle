@@ -1,0 +1,22 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = 'com.example.langchain4j.demos.PersistentMemoryService'
+}
+
+dependencies {
+    implementation 'dev.langchain4j:langchain4j:1.0.0-beta1'
+    implementation 'dev.langchain4j:langchain4j-open-ai:1.0.0-beta1'
+    
+    // Logging dependencies
+    implementation 'org.tinylog:tinylog-impl:2.6.2'
+    implementation 'org.tinylog:slf4j-tinylog:2.6.2'
+    
+    // Add dotenv for reading .env files
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+    
+    // Add MapDB for persistent storage
+    implementation 'org.mapdb:mapdb:3.0.10'
+} 

@@ -1,0 +1,39 @@
+# Environment files
+.env
+*/.env
+**/.env
+
+# Build directories
+build/
+*/build/
+**/build/
+.gradle/
+*/.gradle/
+**/.gradle/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Database files
+*.db
+*/*.db
+**/*.db
+
+# Logs
+*.log
+*/*.log
+**/*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Compiled class files
+*.class
+*/target/
+**/target/ 
