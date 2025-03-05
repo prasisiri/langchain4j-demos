@@ -9,6 +9,7 @@ import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
+import dev.langchain4j.model.github.GitHubModelsChatModel;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -41,9 +42,9 @@ public class PersistentMemoryService {
                 .chatMemoryStore(store)
                 .build();
 
-        ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(dotenv.get("OPENAI_API_KEY"))
-                .modelName("gpt-3.5-turbo")
+        ChatLanguageModel model = GitHubModelsChatModel.builder()
+                .gitHubToken(dotenv.get("GITHUB_TOKEN"))
+                .modelName("gpt-4o-mini")
                 .build();
 
         Assistant assistant = AiServices.builder(Assistant.class)

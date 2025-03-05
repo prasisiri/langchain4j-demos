@@ -20,7 +20,7 @@ public class ModelParameters {
                 .build();
 
         // Test the model
-        String prompt = "Write a short greeting";
+        String prompt = "Which is better langchain4j or springAi";
         String response = model.generate(prompt); // Changed from chat() to generate()
         System.out.println("AI Response: " + response);
     }

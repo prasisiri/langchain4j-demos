@@ -8,7 +8,7 @@ application {
 
 dependencies {
     implementation 'dev.langchain4j:langchain4j:1.0.0-beta1'
-    implementation 'dev.langchain4j:langchain4j-open-ai:1.0.0-beta1'
+    implementation 'dev.langchain4j:langchain4j-github-models:1.0.0-beta1'
     
     // Logging dependencies
     implementation 'org.tinylog:tinylog-impl:2.6.2'
