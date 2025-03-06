@@ -1,0 +1,13 @@
+This is a sample document for testing RAG capabilities.
+It contains information about cancellation policies and accident procedures.
+
+Cancellation Policy:
+- Reservations can be cancelled up to 24 hours before the scheduled time
+- Full refund is provided for cancellations made within the policy window
+- Late cancellations may incur a fee
+
+Accident Procedures:
+- Report any accidents immediately
+- Document the incident with photos
+- No extra charges for accidents covered by insurance
+- Uninsured damages require additional payment 

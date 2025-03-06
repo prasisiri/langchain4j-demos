@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+group = 'dev.langchain4j'
+version = '1.0.0-beta1'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://s01.oss.sonatype.org/content/repositories/releases/" }
+}
+
+dependencies {
+    def langchainVersion = '1.0.0-beta1'
+
+    // Core LangChain4j
+    implementation "dev.langchain4j:langchain4j:${langchainVersion}"
+    implementation "dev.langchain4j:langchain4j-core:${langchainVersion}"
+    implementation "dev.langchain4j:langchain4j-github-models:${langchainVersion}"
+    
+    // SQL Support
+    implementation "dev.langchain4j:langchain4j-experimental-sql:${langchainVersion}"
+    implementation 'com.h2database:h2:2.2.224'
+    
+    // Utilities
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+    implementation 'ch.qos.logback:logback-classic:1.4.11'
+    
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+test {
+    useJUnitPlatform()
+} 
