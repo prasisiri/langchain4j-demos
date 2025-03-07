@@ -17,6 +17,8 @@ public class ModelParameters {
                 .modelName("gpt-3.5-turbo")
                 .temperature(0.7)
                 .maxTokens(100)
+                // .logRequests(true)
+                // .logResponses(true)
                 .build();
 
         // Test the model
