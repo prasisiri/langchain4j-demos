@@ -7,6 +7,7 @@ import dev.langchain4j.model.input.structured.StructuredPrompt;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
 import dev.langchain4j.service.*;
+import dev.langchain4j.service.SystemMessage;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.math.BigDecimal;
@@ -21,19 +22,50 @@ import static java.util.Arrays.asList;
 
 public class AIServiceExamples {
 
-    static ChatLanguageModel model;
+    private static final ChatLanguageModel model = OpenAiChatModel.builder()
+            .apiKey(Dotenv.configure().directory("demo8").load().get("OPENAI_API_KEY"))
+            .modelName("gpt-3.5-turbo")
+            .build();
 
-    static {
-        // Load environment variables from .env file
-        Dotenv dotenv = Dotenv.configure()
-                .directory("demo8")
-                .load();
+    // First Service: Code Generator
+    @SystemMessage("You are a Java code generator. Create simple code based on requirements.")
+    interface CodeGenerator {
+        String generateCode(String requirement);
+    }
 
-        model = OpenAiChatModel.builder()
-                .apiKey(dotenv.get("OPENAI_API_KEY"))
-                .modelName("gpt-3.5-turbo")
-                .timeout(ofSeconds(60))
-                .build();
+    // Second Service: Code Reviewer
+    @SystemMessage("You are a code reviewer. Review code and suggest improvements.")
+    interface CodeReviewer {
+        String reviewCode(String code);
+    }
+
+    // Third Service: Documentation Writer
+    @SystemMessage("You are a technical writer. Write clear documentation for code.")
+    interface DocumentationWriter {
+        String writeDocumentation(String codeWithReview);
+    }
+
+    public static void main(String[] args) {
+        // Create service instances
+        CodeGenerator generator = AiServices.create(CodeGenerator.class, model);
+        CodeReviewer reviewer = AiServices.create(CodeReviewer.class, model);
+        DocumentationWriter writer = AiServices.create(DocumentationWriter.class, model);
+
+        // Chain 1: Generate Code
+        String requirement = "Create a simple Java class to calculate factorial";
+        String generatedCode = generator.generateCode(requirement);
+        System.out.println("=== Generated Code ===");
+        System.out.println(generatedCode);
+
+        // Chain 2: Review Code
+        String codeReview = reviewer.reviewCode(generatedCode);
+        System.out.println("\n=== Code Review ===");
+        System.out.println(codeReview);
+
+        // Chain 3: Write Documentation
+        String documentation = writer.writeDocumentation(generatedCode + "\n\nReview Comments:\n" + codeReview);
+        System.out.println("\n=== Documentation ===");
+        System.out.println(documentation);
     }
 
     // Simple example demonstrating basic chat functionality
