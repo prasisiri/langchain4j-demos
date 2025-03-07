@@ -1,84 +1,58 @@
 package com.example.langchain4j.demos;
 
-import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.data.message.AiMessage;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.time.Duration.ofSeconds;
-
 public class FewShot {
-
         public static void main(String[] args) {
-                // Load environment variables from .env file
+                // Load environment variables
                 Dotenv dotenv = Dotenv.configure()
-                                .directory(".")
+                                .directory("demo7")
                                 .load();
 
-                OpenAiStreamingChatModel model = OpenAiStreamingChatModel.builder()
+                // Initialize model
+                ChatLanguageModel model = OpenAiChatModel.builder()
                                 .apiKey(dotenv.get("OPENAI_API_KEY"))
                                 .modelName("gpt-3.5-turbo")
-                                .timeout(ofSeconds(100))
                                 .build();
 
-                List<ChatMessage> fewShotHistory = new ArrayList<>();
+                // Create few-shot examples
+                List<ChatMessage> messages = new ArrayList<>();
 
-                // Adding positive feedback example to history
-                fewShotHistory.add(UserMessage.from(
-                                "I love the new update! The interface is very user-friendly and the new features are amazing!"));
-                fewShotHistory.add(AiMessage.from(
-                                "Action: forward input to positive feedback storage\nReply: Thank you very much for this great feedback! We have transmitted your message to our product development team who will surely be very happy to hear this. We hope you continue enjoying using our product."));
+                // Example 1
+                messages.add(UserMessage.from("India"));
+                messages.add(AiMessage.from("aidnI"));
 
-                // Adding negative feedback example to history
-                fewShotHistory.add(UserMessage
-                                .from("I am facing frequent crashes after the new update on my Android device."));
-                fewShotHistory.add(AiMessage.from(
-                                "Action: open new ticket - crash after update Android\nReply: We are so sorry to hear about the issues you are facing. We have reported the problem to our development team and will make sure this issue is addressed as fast as possible. We will send you an email when the fix is done, and we are always at your service for any further assistance you may need."));
+                // Example 2
+                messages.add(UserMessage.from("Canada"));
+                messages.add(AiMessage.from("adanaC"));
 
-                // Adding another positive feedback example to history
-                fewShotHistory.add(UserMessage
-                                .from("Your app has made my daily tasks so much easier! Kudos to the team!"));
-                fewShotHistory.add(AiMessage.from(
-                                "Action: forward input to positive feedback storage\nReply: Thank you so much for your kind words! We are thrilled to hear that our app is making your daily tasks easier. Your feedback has been shared with our team. We hope you continue to enjoy using our app!"));
+                // Example 3
+                messages.add(UserMessage.from("Australia"));
+                messages.add(AiMessage.from("ailartsA"));
 
-                // Adding another negative feedback example to history
-                fewShotHistory.add(UserMessage
-                                .from("The new feature is not working as expected. It's causing data loss."));
-                fewShotHistory.add(AiMessage.from(
-                                "Action: open new ticket - data loss by new feature\nReply:We apologize for the inconvenience caused. Your feedback is crucial to us, and we have reported this issue to our technical team. They are working on it on priority. We will keep you updated on the progress and notify you once the issue is resolved. Thank you for your patience and support."));
+                // Add the actual question
+                messages.add(UserMessage.from("Brazil"));
 
-                // Adding real user's message
-                ChatMessage customerComplaint = UserMessage
-                                .from("How can your app be so slow? Please do something about it!");
-                fewShotHistory.add(customerComplaint);
+                // Get response
+                var response = model.generate(messages);
 
-                System.out.println("[User]: " + customerComplaint.text());
-                System.out.print("[LLM]: ");
-
-                model.chat(fewShotHistory, new StreamingChatResponseHandler() {
-
-                        @Override
-                        public void onPartialResponse(String partialResponse) {
-                                System.out.print(partialResponse);
+                // Print all messages including response
+                System.out.println("Few-shot learning demonstration:");
+                System.out.println("--------------------------------");
+                for (int i = 0; i < messages.size(); i += 2) {
+                        System.out.println("Human: " + messages.get(i).text());
+                        if (i + 1 < messages.size()) {
+                                System.out.println("AI: " + messages.get(i + 1).text());
                         }
-
-                        @Override
-                        public void onCompleteResponse(ChatResponse completeResponse) {
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                                throwable.printStackTrace();
-                        }
-                });
-
-                // Extract reply and send to customer
-                // Perform necessary action in back-end
+                }
+                System.out.println("AI: " + response.content().text());
         }
 }
